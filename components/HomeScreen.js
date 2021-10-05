@@ -1,18 +1,7 @@
-import React, {useState} from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import Task from './components/Task';
-// import {Provider} from 'react-redux';
-// import {store} from './redux/store';
+import React from 'react';
 
-const App = () => {
+export default function HomeScreen() {
+  const {ToDoActions} = props;
   const [singleTask, setsingleTask] = useState();
   const [taskList, settaskList] = useState([]);
 
@@ -21,7 +10,7 @@ const App = () => {
 
   const handleAddTask = () => {
     settaskList([...taskList, singleTask]);
-
+    ToDoActions(taskList, '', '');
     setsingleTask(null);
   };
 
@@ -31,7 +20,6 @@ const App = () => {
     settaskList(itemsCopy);
   };
   return (
-    // <Provider store={store}>
     <View style={styles.sectionContainer}>
       <View style={styles.taskWrapper}>
         <Text style={styles.sectionTitle}>Today's tasks</Text>
@@ -73,9 +61,8 @@ const App = () => {
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </View>
-    // </Provider>
   );
-};
+}
 
 const styles = StyleSheet.create({
   sectionContainer: {
@@ -120,5 +107,3 @@ const styles = StyleSheet.create({
   },
   addText: {},
 });
-
-export default App;
