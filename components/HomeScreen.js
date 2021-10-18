@@ -1,17 +1,33 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {connect} from 'react-redux';
+import Task from './Task';
+import {AddCategory} from '../redux/action/ToDoAction';
+import {v4 as uuidv4} from 'uuid';
 
-export default function HomeScreen() {
-  const {ToDoActions} = props;
+function HomeScreen(props) {
   const [singleTask, setsingleTask] = useState();
   const [taskList, settaskList] = useState([]);
 
-  console.log('singleTask', singleTask);
-  console.log('taskList', taskList);
+  const {navigation, Tasks} = props;
 
-  const handleAddTask = () => {
-    settaskList([...taskList, singleTask]);
-    ToDoActions(taskList, '', '');
-    setsingleTask(null);
+  console.log('Tasks', Tasks);
+  const handleAddTask = id => {
+    if (singleTask) {
+      settaskList([...taskList, singleTask]);
+      setsingleTask(null);
+      props.AddCategory({...taskList, id: uuidv4(), categoryName: singleTask});
+    } else {
+      alert('please enter task');
+    }
   };
 
   const CompleteTask = index => {
@@ -19,6 +35,13 @@ export default function HomeScreen() {
     itemsCopy.splice(index, 1);
     settaskList(itemsCopy);
   };
+
+  const handlenavigation = () => {
+    navigation.navigate('Details', {
+      taskList,
+    });
+  };
+
   return (
     <View style={styles.sectionContainer}>
       <View style={styles.taskWrapper}>
@@ -26,19 +49,22 @@ export default function HomeScreen() {
 
         {/* Task Section */}
         <View style={styles.items}>
-          {taskList.map((item, index) => {
-            return (
-              <TouchableOpacity key={index}>
-                <View>
-                  <Task
-                    key={index}
-                    data={item}
-                    handleDelete={() => CompleteTask(index)}
-                  />
-                </View>
-              </TouchableOpacity>
-            );
-          })}
+          {taskList?.length > 0 &&
+            taskList?.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => handlenavigation()}>
+                  <View>
+                    <Task
+                      key={item.id}
+                      data={item}
+                      handleDelete={() => CompleteTask(index)}
+                    />
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
         </View>
       </View>
       {/* Create a task */}
@@ -107,3 +133,15 @@ const styles = StyleSheet.create({
   },
   addText: {},
 });
+
+const mapDispatchToProps = {
+  AddCategory,
+};
+
+const mapStateToProps = state => {
+  const {Tasks} = state.ToDoReducer;
+  return {
+    Tasks,
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

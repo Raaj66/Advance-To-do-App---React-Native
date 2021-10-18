@@ -1,49 +1,50 @@
 import {ADD_CATEGORY} from '../constants';
+import {v4 as uuidv4} from 'uuid';
 
 const initialState = {
-  Tasks: [
+  list: [
     {
-      Category: {
-        id: 0,
-        CategoryName: 'Cat1',
-        SubCategory: [
-          {
-            id: 0,
-            SubCategoryName: 'SubCat1',
-            Tasks: ['task1', 'task2'],
-          },
-          {
-            id: 1,
-            SubCategoryName: 'SubCat1',
-            Tasks: ['task1', 'task2'],
-          },
-        ],
-      },
-      Category: {
-        id: 1,
-        CategoryName: 'Cat1',
-        SubCategory: [
-          {
-            id: 0,
-            SubCategoryName: 'SubCat1',
-            Tasks: ['task1', 'task2'],
-          },
-          {
-            id: 1,
-            SubCategoryName: 'SubCat1',
-            Tasks: ['task1', 'task2'],
-          },
-        ],
-      },
+      id: uuidv4(),
+      categoryName: 'Family',
+      SubCategory: [
+        {
+          id: uuidv4(),
+          name: 'Father Side',
+          tasks: [
+            {
+              id: uuidv4(),
+              details: 'Call dady1',
+            },
+            {
+              id: uuidv4(),
+              details: 'Call Mom1',
+            },
+          ],
+        },
+        {
+          name: 'Mother Side',
+          tasks: [
+            {
+              id: uuidv4(),
+              details: 'Call dady1',
+            },
+            {
+              id: uuidv4(),
+              details: 'Call Mom1',
+            },
+          ],
+        },
+      ],
     },
   ],
 };
 
 export default function ToDoReducer(state = initialState, action) {
+  console.log('action', action.payload);
   if (action.type === ADD_CATEGORY) {
-    const {CategoryName, SubCategoryName, Tasks} = action.payload;
     return {
       ...state,
+      ...action.payload,
     };
   } else {
     return state;

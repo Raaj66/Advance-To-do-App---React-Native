@@ -1,12 +1,9 @@
 import {ADD_CATEGORY} from '../constants';
 
-export const ToDoActions = (CategoryName, SubCategoryName, Tasks) => {
+export const AddCategory = data => {
+  console.log('action call');
   return {
     type: ADD_CATEGORY,
-    payload: {
-      CategoryName: CategoryName,
-      SubCategoryName: SubCategoryName,
-      Tasks: Tasks,
-    },
+    payload: data,
   };
 };
